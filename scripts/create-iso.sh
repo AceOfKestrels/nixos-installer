@@ -19,6 +19,7 @@ output_dir="$script_dir/../output"
 if [ -n "$2" ]; then
     output_dir="$2"
 fi
+output_dir=$(realpath "$output_dir")
 
 mkdir -p "$output_dir" || exit 1
 

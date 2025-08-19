@@ -33,12 +33,14 @@ jobs:
         env:
           NIX_CONFIG: "experimental-features = nix-command flakes"
         run: |
+          set -euo pipefail
           mkdir -p dist
           chmod +x scripts/create-iso.sh
           ./scripts/create-iso.sh live-boot dist/iso
 
       - name: Check name of created file
         run: |
+          set -euo pipefail
           iso_files=(dist/iso/*.iso)
 
           if [ -z "$iso_files" ]; then
@@ -50,6 +52,7 @@ jobs:
 
       - name: Create release notes
         run: |
+          set -euo pipefail
           {
             echo "# Automated daily build"
             echo
