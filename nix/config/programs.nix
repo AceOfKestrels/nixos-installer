@@ -14,6 +14,11 @@
         openssh
         dig
         jq
+        gparted
+        cpu-x
+        rclone
+        rsync
+        remmina
     ];
 
     services.openssh.enable = true;
