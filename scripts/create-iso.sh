@@ -30,6 +30,7 @@ echo "writing iso file - this might take a while"
 rm result 2>/dev/null
 rm -rf result 2>/dev/null
 
+nix flake update --flake "$flake_path"
 nix build "$flake_path#nixosConfigurations.$config_name.config.system.build.isoImage" || exit 1
 
 iso_files=(result/iso/*.iso)
@@ -40,8 +41,6 @@ file_name=$(basename "$created_file")
 cp "$created_file" "$output_dir/$config_name-$file_name" -f
 rm result
 
-absolute_path=$(realpath "$output_dir/$file_name")
-
-echo "written to $absolute_path"
+echo "written to $output_dir/$file_name"
 
 cd - >/dev/null || exit 1

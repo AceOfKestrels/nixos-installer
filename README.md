@@ -1,4 +1,4 @@
-# nixos-config/live-boot/scripts
+# nixos-installer
 
 Helper scripts to create a live-boot iso and write it to a usb drive
 
