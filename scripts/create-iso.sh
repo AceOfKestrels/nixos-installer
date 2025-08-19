@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-flake_path=$(realpath "$script_dir/../devices/live-boot")
+flake_path=$(realpath "$script_dir/../nix/flake")
 
 config_name="live-boot"
 if [ -n "$1" ]; then
