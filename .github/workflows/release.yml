@@ -38,17 +38,14 @@ jobs:
           chmod +x scripts/create-iso.sh
           ./scripts/create-iso.sh live-boot dist/iso
 
-      - name: Check name of created file
+      - name: Check created files
         run: |
-          set -euo pipefail
           iso_files=(dist/iso/*.iso)
 
           if [ -z "$iso_files" ]; then
             echo "fatal: no files were created"
             exit 1
           fi
-          
-          created_file=${iso_files[0]}
 
       - name: Create release notes
         run: |
@@ -78,8 +75,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
+          iso_files=(dist/iso/*.iso)
+          created_file=${iso_files[0]}
+
           gh release create latest \
             --title "Latest" \
             --notes-file dist/RELEASE_NOTES.md \
             --target "${TARGET_BRANCH}" \
-            dist/iso/$created_file
+            "$created_file"
