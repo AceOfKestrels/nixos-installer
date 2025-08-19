@@ -1,0 +1,82 @@
+name: Daily "latest" release
+
+on:
+  schedule:
+    - cron: "0 3 * * *"   # daily at 03:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: daily-latest-release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    env:
+      TARGET_BRANCH: main
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Build image
+        env:
+          NIX_CONFIG: "experimental-features = nix-command flakes"
+        run: |
+          mkdir -p dist
+          chmod +x scripts/create-iso.sh
+          ./scripts/create-iso.sh live-boot dist/iso
+
+      - name: Check name of created file
+        run: |
+          iso_files=(dist/iso/*.iso)
+
+          if [ -z "$iso_files" ]; then
+            echo "fatal: no files were created"
+            exit 1
+          fi
+          
+          created_file=${iso_files[0]}
+
+      - name: Create release notes
+        run: |
+          {
+            echo "# Automated daily build"
+            echo
+            echo "Built on $(date -u +"%Y-%m-%d %H:%M UTC") from branch \`${GITHUB_REF_NAME}\`."
+          } > dist/RELEASE_NOTES.md
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Delete existing 'latest' release (if any)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release delete latest -y || true
+
+      - name: Delete existing 'latest' tag (if any)
+        run: |
+          git tag -d latest 2>/dev/null || true
+          git push origin :refs/tags/latest 2>/dev/null || true
+
+      - name: Create new 'latest' release and upload assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create latest \
+            --title "Latest" \
+            --notes-file dist/RELEASE_NOTES.md \
+            --target "${TARGET_BRANCH}" \
+            dist/iso/$created_file

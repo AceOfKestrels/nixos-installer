@@ -15,7 +15,7 @@ if [ -n "$1" ]; then
     fi
 fi
 
-output_dir="$script_dir"
+output_dir="$script_dir/../output"
 if [ -n "$2" ]; then
     output_dir="$2"
 fi

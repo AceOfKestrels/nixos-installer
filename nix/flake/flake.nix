@@ -14,7 +14,7 @@
             hostname = "nixos";
         in
         {
-            nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
+            nixosConfigurations.live-boot = nixpkgs.lib.nixosSystem {
                 system = "x86_64-linux";
                 specialArgs = { inherit inputs; };
                 modules = [
