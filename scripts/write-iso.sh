@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 if [ -z "$1" ] || [ -z "$2" ]; then
-    echo "usage: write-iso.sh <iso-path> <usb-path>"
+    echo "usage: write-iso.sh <iso-path> <target-path>"
     exit 1
 fi
 
