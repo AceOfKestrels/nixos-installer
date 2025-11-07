@@ -58,7 +58,7 @@ jobs:
                     exit 1
                 fi
 
-                echo "file=$(realpath file)" >> "$GITHUB_OUTPUT"
+                echo "file=$(realpath "$file")" >> "$GITHUB_OUTPUT"
 
 
           - name: "Upload iso file"
