@@ -1,5 +1,7 @@
 # nixos-installer
 
+Download the latest iso file at [nixos-iso.kestrels.dev](https://nixos-iso.kestrels.dev/download)
+
 Helper scripts to create a live-boot iso and write it to a usb drive
 
 ## Usage
