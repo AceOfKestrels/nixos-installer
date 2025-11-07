@@ -77,11 +77,13 @@ jobs:
             run: | 
                 checksumFile="$FILE_PATH.sha256"
                 echo "$CHECKSUM" > "$checksumFile"
-                echo "checksum_file=$filename" >> "$GITHUB_OUTPUT"
+                echo "checksum_file=$checksumFile" >> "$GITHUB_OUTPUT"
 
           - name: "Create release"
             uses: KestrelsDevelopment/Workflows/.github/actions/create-release@main
             with:
                 name: latest
-                body: ${{ steps.upload.outputs.download-url }}
+                body: |
+                    Download Link: ${{ steps.upload.outputs.download-url }}
+                    Checksum: ${{ steps.upload.outputs.checksum }}
                 files: ${{ steps.checksum.outputs.checksum_file }}
