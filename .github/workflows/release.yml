@@ -73,9 +73,10 @@ jobs:
             id: checksum
             env: 
                 FILE_PATH: ${{ steps.check_files.outputs.file }}
+                CHECKSUM: ${{ steps.upload.outputs.checksum }}
             run: | 
                 checksumFile="$FILE_PATH.sha256"
-                sha256sum -- "$FILE_PATH" > "$checksumFile"
+                echo "$CHECKSUM" > "$checksumFile"
                 echo "checksum_file=$filename" >> "$GITHUB_OUTPUT"
 
           - name: "Create release"
