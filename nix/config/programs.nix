@@ -19,6 +19,7 @@
         rclone
         rsync
         remmina
+        btrfs-progs
     ];
 
     services.openssh.enable = true;
