@@ -13,14 +13,12 @@ permissions:
     contents: write
 
 jobs:
-    build:
-        uses: KestrelsDevelopment/Workflows/.github/workflows/nix-build.yml@main 
-    lint:
-        uses: KestrelsDevelopment/Workflows/.github/workflows/nix-lint.yml@main 
+    nix-ci:
+        uses: KestrelsDevelopment/Workflows/.github/workflows/nix-ci.yml@main 
 
     build-and-release:
         runs-on: ubuntu-latest
-        needs: [ build, lint ]
+        needs: [ nix-ci ]
         env:
             TARGET_BRANCH: main
 
